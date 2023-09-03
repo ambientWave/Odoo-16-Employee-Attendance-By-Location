@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="BHHrAttendanceMyMainMenu">
+
+        <div class="o_hr_attendance_kiosk_mode_container o_home_menu_background d-flex flex-column align-items-center justify-content-center h-100 text-center">
+            <span class="o_hr_attendance_kiosk_backdrop position-absolute top-0 start-0 end-0 bottom-0 bg-black-25"/>
+
+            <div t-attf-class="o_hr_attendance_kiosk_mode flex-grow-1 flex-md-grow-0 card pb-3 px-0 px-lg-5 {{kioskModeClasses ? kioskModeClasses : '' }}">
+                <div class="card-body d-flex flex-column p-0 p-md-4">
+                    <t t-set="checked_in" t-value="widget.employee.attendance_state=='checked_in'"/>
+                    <t t-if="widget.employee">
+                        <div class="o_hr_attendance_user_badge o_home_menu_background d-flex align-items-end justify-content-center flex-grow-1 pt-5 pt-md-4 bg-odoo">
+                            <img class="img rounded-circle  mb-n5" t-attf-src="/web/image?model=hr.employee.public&amp;field=avatar_128&amp;id=#{widget.employee.id}" t-att-title="widget.employee.name" height="80" t-att-alt="widget.employee.name"/>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h1 style="padding-top: 40px;" class="mb8"><t t-esc="widget.employee.name"/></h1>
+                            <h3 class="mt8 mb24">
+                                <t t-if="!checked_in">Welcome!</t>
+                                <t t-else="">Want to check out?</t>
+                            </h3>
+                        </div>
+
+                        <h4 class="mt0 mb0 text-muted" t-if="checked_in">Today's work hours: <span t-esc="widget.hours_today"/></h4>
+                            <div class="flex-grow-1">
+                                <button t-if="checked_in" t-attf-class="o_hr_attendance_sign_in_out_icon btn btn-{{ checked_in ? 'warning' : 'success' }} align-self-center px-5 py-3 mt-4 mb-2">
+                                    <span class="align-middle fs-2 me-3 text-white" t-if="!checked_in">Check IN</span>
+                                    <i t-attf-class="fa fa-4x fa-sign-{{ checked_in ? 'out' : 'in' }} align-middle"/>
+                                    <span class="align-middle fs-2 ms-3" t-if="checked_in">Check OUT</span>
+                                </button>
+                            </div>
+                        <!-- <a class="fa fa-7x o_hr_attendance_sign_in_out_icon fa-sign-out btn-warning o_hr_attendance_sign_in_out_icon btn btn-warning align-self-center px-5 py-3 mt-4 mb-2" t-if="checked_in" aria-label="Sign out" title="Sign out"/> -->
+                        <t t-if="widget.attendance_location">
+                            <div class="row">
+                                <t t-if="!checked_in">
+                                    <t t-foreach="widget.attendance_location" t-as="location">
+                                        <div class="col-md-4">
+                                            <a t-att-class="'fa fa-5x o_hr_attendance_sign_in_out_icon btn-secondary ' + location.loc_class_name" t-att-location-id="location.id" t-if="!checked_in" aria-label="Sign in" title="Sign in"/>
+                                            <h3 class="mt0 mb0 text-muted"><b>Check in at <t t-esc="location.name"/><i class="" aria-hidden="true"></i></b></h3>
+                                        </div>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <h3 class="col-md-12 mt0 mb0 text-muted">Click to <b t-if="checked_in">check out</b></h3>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <a class="fa fa-7x o_hr_attendance_sign_in_out_icon fa-sign-in btn-secondary" t-if="!checked_in" aria-label="Sign in" title="Sign in"/>
+                            <h3 class="mt0 mb0 text-muted">Click to <b t-if="checked_in">check out</b><b t-if="!checked_in">check in</b></h3>
+                        </t>
+
+                    </t>
+                    <t t-else="">
+                        Warning : Your user should be linked to an employee to use attendance. Please contact your administrator.
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
